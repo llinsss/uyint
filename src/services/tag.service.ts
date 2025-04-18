@@ -150,6 +150,34 @@ class TagService {
   async getTagByPetId(petId: string): Promise<ITag | null> {
     return await Tag.findOne({ pet: petId });
   }
+}// src/services/tag.service.ts
+import jwt from 'jsonwebtoken';
+
+class TagService {
+  // ...
+
+  async generateSecureQRCode(tagId: string): Promise<string> {
+    const payload = { 
+      tagId,
+      timestamp: Date.now() 
+    };
+    const token = jwt.sign(payload, process.env.QR_SECRET_KEY!, { 
+      expiresIn: '1y' 
+    });
+
+    return QRCode.toDataURL(JSON.stringify({ token }));
+  }
+
+  async verifyQRCode(qrData: string): Promise<{ tagId: string; isValid: boolean }> {
+    try {
+      const { token } = JSON.parse(qrData);
+      const decoded = jwt.verify(token, process.env.QR_SECRET_KEY!) as { tagId: string };
+      return { tagId: decoded.tagId, isValid: true };
+    } catch (err) {
+      return { tagId: '', isValid: false };
+    }
+  }
 }
+
 
 export default new TagService();
