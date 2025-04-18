@@ -1,6 +1,7 @@
 import Tag, { ITag, TAG_STATUS } from '../models/Tag';
 import { NotFoundError, ForbiddenError } from '../errors';
 import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
 
 class TagService {
   // Create a new tag (with optional QR code generation)
@@ -150,8 +151,8 @@ class TagService {
   async getTagByPetId(petId: string): Promise<ITag | null> {
     return await Tag.findOne({ pet: petId });
   }
-}// src/services/tag.service.ts
-import jwt from 'jsonwebtoken';
+}
+
 
 class TagService {
   // ...

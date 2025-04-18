@@ -84,4 +84,38 @@ class TagController {
   }
 }
 
+class TagController {
+  // ...
+
+  async generateBulkTags(req: Request, res: Response) {
+    const { count } = validate(Joi.object({ count: Joi.number().max(100).default(10) }), req.body);
+    const tags = await Promise.all(
+      Array.from({ length: count }, () => tagService.createTag())
+    );
+    res.json(tags);
+  }
+
+  async linkTagsToShelter(req: Request, res: Response) {
+    const { tagIds, shelterId } = validate(/* schema */, req.body);
+    const results = await tagService.linkTagsToShelter(tagIds, shelterId);
+    res.json(results);
+  }
+}// src/controllers/tag.controller.ts
+class TagController {
+  // ...
+
+  async generateBulkTags(req: Request, res: Response) {
+    const { count } = validate(Joi.object({ count: Joi.number().max(100).default(10) }), req.body);
+    const tags = await Promise.all(
+      Array.from({ length: count }, () => tagService.createTag())
+    );
+    res.json(tags);
+  }
+
+  async linkTagsToShelter(req: Request, res: Response) {
+    const { tagIds, shelterId } = validate(/* schema */, req.body);
+    const results = await tagService.linkTagsToShelter(tagIds, shelterId);
+    res.json(results);
+  }
+}
 export default new TagController();
